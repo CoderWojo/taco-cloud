@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<!-- 1. stosuj restrykcje kodu html zgodne z XHTML
+    2. niech Thymeleaf interpretuje atrybuty th: na polecenia xhtml -->
+<html xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Taco Cloud</title>
+    </head>
+
+    <body>
+        <h1>Welcome to...</h1>
+        <!-- odwołaj się do /static/images/TacoCloud.png -->
+        <img th:src="@{/images/TacoCloud.png}"/>
+
+        <h3><a href="/design">Click to order tacos!</a></h3>
+    </body>
+</html>

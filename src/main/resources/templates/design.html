@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Taco Cloud</title>
+        <!-- '/' w znacznikach takich jak '<link> oznacza ścieżkę do zasobów statycznych -->
+        <link rel="stylesheet" th:href="@{/styles.css}"/>        
+    </head>
+
+    <body>
+        <h1>Design your taco!</h1>
+        <img th:src="@{/images/TacoCloud.png}"/>
+
+        <!--$ odwołuje się do wartości atrybutu -->
+        <!-- formularz jest powiązany z obiektem taco modelu -->
+        <form method="POST" th:object="${taco}"> 
+            <div class="grid"> <!-- blok formularza-->
+                <div class="ingredient-group" id="wraps">
+                    <h3>Designate your wrap:</h3>
+                    <span th:if="${#fields.hasErrors('ingredients')}" th:errors="*{ingredients}" class="validationError"></span><br/>
+                    <div th:each="ingredient : ${wrap}">
+                        <input th:field="*{ingredients}" 
+                            type="checkbox" 
+                            th:value="${ingredient.id}"/> <!-- dzięki thvalue możemy dynamicznie przywiązać dane -->
+                        <span th:text="${ingredient.name}">INGREDIENT</span>
+                    </div>
+                </div>
+
+                <div class="ingredient-group" id="proteins">
+                    <h3>Pick your protein:</h3>
+                    <div th:each="ingredient : ${protein}">
+                        <input type="checkbox" 
+                            th:value="${ingredient.id}"
+                            th:field="*{ingredients}"/>
+                        <span th:text="${ingredient.name}">INGREDIENT</span><br/>
+                    </div>
+                </div>
+
+                <div class="ingredient-group" id="cheeses">
+                    <h3>Choose your cheese:</h3>
+                    <div th:each="ingredient : ${cheese}">
+                        <input type="checkbox" 
+                            th:value="${ingredient.id}"
+                            th:field="*{ingredients}"/>
+                        <span th:text="${ingredient.name}">INGREDIENT</span><br/>
+                    </div>
+                </div>
+                <!-- dopóki nie ma określonego th:object, operator * i $ działają tak samo. -->
+                <div class="ingredient-group" id="veggies">
+                    <h3>Determine your veggies:</h3>
+                    <div th:each="ingredient : ${veggies}">
+                        <!-- umieszczamy cały składnik i checkbox w <DIV> aby tworzyło to spójną całość tzn. aby składnik zawierał input i span w grupie -->
+                        <input type="checkbox"
+                            th:value="${ingredient.id}"
+                            th:field="${taco.ingredients}"/>
+                        <span th:text="${ingredient.name}">INGREDIENT</span><br/>        
+                    </div>
+                </div>
+
+                <div class="ingredient-group" id="sauces">
+                    <h3>Select your sauce:</h3>
+                    <div th:each="ingredient : ${sauce}">
+                        <input type="checkbox"
+                            th:value="${ingredient.id}"
+                            th:field="*{ingredients}"/>
+                        <span th:text="${ingredient.name}">INGREDIENT</span>
+                        <br/>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label for="name"><h3>Name your creation:</h3></label>
+                <input type="text" th:field="*{name}"/><span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="validationError"></span> <!-- pobierz message z pola 'name' oznaczonego adnotacją walidacyjną-->
+                <br/>
+                <!-- domyślnie typem <button> jest SUBMIT -->
+                <button class="button">Submit your taco.</button>
+            </div>
+        </form>
+    </body>
+</html>

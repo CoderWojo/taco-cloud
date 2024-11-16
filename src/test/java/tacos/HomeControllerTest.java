@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 // nie musimy uruchamiać aplikacji 
-@WebMvcTest()
+@WebMvcTest
 public class HomeControllerTest {
     // dzięki @Autowired, Spring automatycznie wstrzyknie instancję obiektu mockMvc i będzie nią zarządzać
     // klasa do uruchamiania żądań, bez konieczności uruchamiania serwera

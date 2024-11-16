@@ -40,6 +40,7 @@ public class HomePageBrowserTest {
         browser.get(homePage);
 
         String titleText = browser.getTitle();
+        // wywołujemy metodę assercji która jeśli zwróci negatywną wartość, test zwróci wyjątek
         Assertions.assertEquals("Taco Cloud", titleText);
 
         String h1Text = browser.findElement(By.tagName("h1")).getText();// tekst <h1>

@@ -71,7 +71,8 @@
 
             <div>
                 <label for="name"><h3>Name your creation:</h3></label>
-                <input type="text" th:field="*{name}"/><span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="validationError"></span> <!-- pobierz message z pola 'name' oznaczonego adnotacją walidacyjną-->
+                <input type="text" th:field="*{name}"/>
+                <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="validationError"></span> <!-- pobierz message z pola 'name' oznaczonego adnotacją walidacyjną-->
                 <br/>
                 <!-- domyślnie typem <button> jest SUBMIT -->
                 <button class="button">Submit your taco.</button>

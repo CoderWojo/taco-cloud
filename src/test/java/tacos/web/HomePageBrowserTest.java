@@ -1,4 +1,4 @@
-package tacos; // src/test/java   to standardowa lokalizacja dla kodu testowego
+package tacos.web; // src/test/java   to standardowa lokalizacja dla kodu testowego
 
 import java.time.Duration;
 

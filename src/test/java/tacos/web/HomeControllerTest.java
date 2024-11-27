@@ -1,4 +1,4 @@
-package tacos;
+package tacos.web;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -10,17 +10,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-// nie musimy uruchamiać aplikacji 
-@WebMvcTest
+import tacos.data.IngredientRepository;
+import tacos.data.OrderRepository;
+
+// Adnotacja @WebMvcTest wymusza na Springu aby załadował wszystkie komponenty warstwy WEBOWEJ (wszystkie kontrolery)
+@WebMvcTest // załaduj pełny kontekst aplikacji (gdy mamy samo W@), bo nie mamy Kontrollera HomeController, tylko jego konfigurację
 public class HomeControllerTest {
-    // dzięki @Autowired, Spring automatycznie wstrzyknie instancję obiektu mockMvc i będzie nią zarządzać
-    // klasa do uruchamiania żądań, bez konieczności uruchamiania serwera
+
     @Autowired
     private MockMvc mockMvc;
 
+    @MockBean
+    private IngredientRepository ingredientRepo;
+    
+    @MockBean
+    private OrderRepository orderRepo;
+    
     @Test
     public void testHomePage() throws Exception{
         mockMvc.perform(MockMvcRequestBuilders.get("/"))

@@ -1,5 +1,6 @@
 package tacos;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +34,7 @@ public class DesignAndOrderTacosBrowserTest {
         options = new ChromeOptions();
         options.addArguments("--window-size=1920,1080");
         browser = new ChromeDriver(options);
+        browser.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
     }
 
     @AfterAll
@@ -62,6 +64,8 @@ public class DesignAndOrderTacosBrowserTest {
         // 6. wypełnij formularz niepoprawnymi danymi
         fillInAndSubmitOrderForm();
 
+        System.out.println("AKTUALNY URL: " + browser.getCurrentUrl());
+        System.out.println("OCZEKIWANY z homePageUrl(): " + homePageUrl());
         // 7. sprawdź adres url (home)
         assertThat(browser.getCurrentUrl()).isEqualTo(homePageUrl());
         
@@ -189,13 +193,13 @@ public class DesignAndOrderTacosBrowserTest {
         fillField("input#deliveryName", "Hipo");
         fillField("input#deliveryStreet", "House num 1.");
         fillField("input#deliveryCity", "Hipolandia");
-        fillField("input#deliveryState", "Poland");
+        fillField("input#deliveryState", "PL");
         fillField("input#deliveryZip", "81019");
         fillField("input#ccNumber", "4111111111111111");
         fillField("input#ccExpiration", "12/35");
         fillField("input#ccCVV", "123");
 
-        browser.findElement(By.cssSelector("input[value='Submit'")).click();
+        browser.findElement(By.cssSelector("input[value='Submit']")).click();
     }
 
     private void fillField(String cssFieldName, String value) {

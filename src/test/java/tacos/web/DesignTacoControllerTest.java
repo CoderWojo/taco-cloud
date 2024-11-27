@@ -1,26 +1,33 @@
-package tacos;
+package tacos.web;
+
 
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import tacos.Ingredient;
 import tacos.Ingredient.Type;
-import tacos.web.DesignTacoController;
+import tacos.data.IngredientRepository;
 
-@WebMvcTest(DesignTacoController.class)   // Testujemy warstwę webową aplikacji - DesignTacoController
-// @ExtendWith(SpringExtension.class)  // zapewniamy dostęp do kontekstu Springa - NIEKONIECZNE BO ADNOTACJA @WebMvcTest już to zapewnia
+// Testujemy warstwę webową aplikacji - DesignTacoController
+@WebMvcTest(DesignTacoController.class)
 public class DesignTacoControllerTest {
-    // do symulacji żądań http do kontrolera. NIE uruchamia całej aplikacji
-    // Spring zainicjuje automatycznie, bo MockMvc jest częścią konfiguracji kontekstu testowego dla warstwy webowej
-    // DZIAŁA TO TYLKO Z KAŻDYM OBIEKTEM ZARZĄDZANYM PRZEZ SPRING'a
+    
+    @MockBean
+    private IngredientRepository ingredientRepo;    // Dodajemy to pole aby Spring mógł wstrzyknął Mocka dla klasy Kontrolera DesignTacoController w której jest potrzbny taki bean
+    // normalnie to gdy używamy @WebMvcTest, to Spring załadowuje inne klasy ale nie KOMPONENTY(repoz,services itd) a w takim przypadku bedzie mogl podstawic "odpowiadający" obiekt  
+
     @Autowired
     private MockMvc mockMvc;
     private List<Ingredient> ingredients;   // oczekiwane składniki
@@ -40,13 +47,17 @@ public class DesignTacoControllerTest {
             new Ingredient("SLSA", "Salsa", Type.SAUCE),
             new Ingredient("SRCR", "Sour Cream", Type.SAUCE)
         );
+
+        // Wywołujemy metodę findAll() na mocku i konfigurujemy ją do zwrócenia określonego wyniku za pomocą metody
+        when(ingredientRepo.findAll())
+            .thenReturn(ingredients);
     }
 
     // sprawdz czy wszystkie składniki zostały załadowane poprawnie
     @Test
     public void testShowDesignForm() throws Exception{
         // test pokazania formularza do design'u taco, czyli czy dane zostały załadowane poprawnie
-        mockMvc.perform(MockMvcRequestBuilders.get("/design"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/design"))  // tutaj wykonujemy żądanie na ścieżkę /design i testujemy klasę kontrolera 'DesignTacoController'
             .andExpect(MockMvcResultMatchers.status().isOk())   // czy status OK
             .andExpect(MockMvcResultMatchers.view().name("design")) // czy nazwa widoku jest design
             .andExpect(MockMvcResultMatchers.model().attribute("wrap", ingredients.subList(0, 2)))// czy lista z modelu odpowiada liście powyższej dla wrapow
